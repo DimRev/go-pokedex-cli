@@ -29,7 +29,10 @@ func startRepl(cfg *config) {
 			continue
 		}
 
-		command.callback(cfg)
+		err := command.callback(cfg)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 }
 
@@ -47,8 +50,13 @@ func getCommands() map[string]cliCommand {
 		},
 		"map": {
 			name:        "map",
-			description: "Lists some location areas",
+			description: "Lists next page of location areas",
 			callback:    callbackMap,
+		},
+		"mapb": {
+			name:        "mapb",
+			description: "Lists previous page of location areas",
+			callback:    callbackMapB,
 		},
 	}
 }
