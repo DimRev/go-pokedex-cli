@@ -7,9 +7,12 @@ import (
 	"net/http"
 )
 
-func (c *Client) ListLocationAreas() (LocationAreasResp, error) {
+func (c *Client) ListLocationAreas(pageUrl *string) (LocationAreasResp, error) {
 	endpoint := "/location-area"
 	fullURL := baseURL + endpoint
+	if pageUrl != nil {
+		fullURL = *pageUrl
+	}
 
 	req, err := http.NewRequest("GET", fullURL, nil)
 	if err != nil {
@@ -31,11 +34,11 @@ func (c *Client) ListLocationAreas() (LocationAreasResp, error) {
 		return LocationAreasResp{}, err
 	}
 
-	LocAreaResp := LocationAreasResp{}
-	err = json.Unmarshal(dat, &LocAreaResp)
+	var locationArea LocationAreasResp
+	err = json.Unmarshal([]byte(dat), &locationArea)
 	if err != nil {
 		return LocationAreasResp{}, err
 	}
 
-	return LocAreaResp, nil
+	return locationArea, nil
 }
